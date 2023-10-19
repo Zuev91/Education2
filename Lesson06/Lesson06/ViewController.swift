@@ -27,16 +27,22 @@ class ViewController: UIViewController {
         // Task3. Количество строк, где символов больше чем 10
         let count3 = arrayOfStrings.filter {$0.count > 10}.count
         print(count3)
+        
         // Task4. Распечатать строку в которой больше всего символов
         var tmp = arrayOfStrings[0]
         for value in arrayOfStrings {
             tmp = tmp.count < value.count ? value : tmp
         }
         print(tmp)
+        
         // Task5. Отсортировать массив, по возрастанию количества символов в строке
         arrayOfStrings = arrayOfStrings.sorted {
             $0.count < $1.count
         }
+        print(arrayOfStrings)
+        
+        //  Task6. Выбросить пробелы из строк в массиве
+        arrayOfStrings = arrayOfStrings.map { $0.filter { !$0.isWhitespace}}
         print(arrayOfStrings)
     }
 
