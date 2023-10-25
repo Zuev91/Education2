@@ -47,7 +47,6 @@ func printPositionOfOrder(name: Position, menu: Menu) {
             print("\(value.name) \(value.price)")
                     }
             }
-                print("No such position in menu")
 }
 
 class ViewController: UIViewController {
