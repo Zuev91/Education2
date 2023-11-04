@@ -10,17 +10,82 @@
 
 import UIKit
 
+@objc class Position: NSObject {
+    var type : String = ""
+    var name : String = ""
+    var price : Double = 0
+    
+    func printType() {
+        print(type)
+    }
+}
+
+@objc class MenuPosition: Position {
+    override func printType() {
+        print("\(name) \(price)")
+    }
+}
+
+class Menu {
+    
+    var snacks : [Position] = []
+    var mainCourses : [Position] = []
+    var drinks : [Position] = []
+    var desserts : [Position] = []
+    
+    init() {
+        let cheeseOmelette = MenuPosition()
+        cheeseOmelette.type = "Snacks"
+        cheeseOmelette.name = "Cheese omelette"
+        cheeseOmelette.price = 3.5
+        snacks.append(cheeseOmelette)
+        
+        let vegetablePasta = MenuPosition()
+        vegetablePasta.type = "Main Courses"
+        vegetablePasta.name = "Vegetable pasta"
+        vegetablePasta.price = 4.85
+        mainCourses.append(vegetablePasta)
+        
+        let englishTea = MenuPosition()
+        englishTea.type = "Drinks"
+        englishTea.name = "English tea"
+        englishTea.price = 0.90
+        drinks.append(englishTea)
+        
+        let chocolateCake = MenuPosition()
+        chocolateCake.type = "Desserts"
+        chocolateCake.name = "Chocolate cake"
+        chocolateCake.price = 0.90
+        desserts.append(chocolateCake)
+        
+        let cheeseburger = MenuPosition()
+        cheeseburger.type = "Snacks"
+        cheeseburger.name = "Cheeseburger"
+        cheeseburger.price = 3.2
+        snacks.append(cheeseburger)
+    }
+    
+}
+
+func printPosition(_ position: Position) {
+    position.printType()
+}
+
 class Restaurant {
-    private init() {}
     
     static let shared = Restaurant()
     
+    let menu = Menu()
     private(set) var count: Double = 0.0
     private(set) var orderListPerDay: [String] = []
+    
+    private init() {
+        
+    }
 
-    func addPositionInList(_ title: String, _ price: Double) {
-        orderListPerDay.append(title)
-        count += price
+    func addPositionInList(_ position: Position) {
+        orderListPerDay.append(position.name)
+        count += position.price
     }
     func printOrderListPerDay() {
         for value in orderListPerDay {
@@ -34,68 +99,98 @@ class Restaurant {
     
 }
 
+
+
 class ViewController: UIViewController {
-    let tmp = Restaurant.shared
-    @objc func addPositionInList(title: String, price: Double) {
-        tmp.addPositionInList(title, price)
-        cashDeskAtTheEndOfTheWorkingDay.setTitle(String(tmp.count), for: .normal)
+    let restaurant = Restaurant.shared
+    
+    lazy var menu = restaurant.menu
+    
+    @objc func addPositionInList(_ position: Position) {
+        restaurant.addPositionInList(position)
+        cashDeskAtTheEndOfTheWorkingDay.setTitle(String(format: "%.2f",restaurant.count), for: .normal)
     }
-    let firstPosition = {
+    @objc func startWorkingDay() {
+        restaurant.startWorkingDay()
+        cashDeskAtTheEndOfTheWorkingDay.setTitle(String(format: "%.2f",restaurant.count), for: .normal)
+    }
+    @objc func printOrderListPerDay() {
+        restaurant.printOrderListPerDay()
+    }
+    lazy var firstPosition = {
         let firstPositionButton = UIButton(type: .system)
-        let title = "Cheese omelette"
-        let price = 3.5
-        firstPositionButton.setTitle(title, for: .normal)
+        firstPositionButton.setTitle(menu.snacks[0].name, for: .normal)
         firstPositionButton.setTitleColor( .green, for: .normal)
         firstPositionButton.backgroundColor = .red
-        firstPositionButton.addTarget(self, action: #selector(addPositionInList(title: title, price: price)), for: .touchUpInside)
+        firstPositionButton.addAction(UIAction(handler: { _ in
+            self.addPositionInList(self.menu.snacks[0])
+        }), for: .touchUpInside)
         return firstPositionButton
     }()
     
-    let secondPosition = {
+    lazy var secondPosition = {
         let secondPositionButton = UIButton(type: .system)
-        secondPositionButton.setTitle("2", for: .normal)
+        secondPositionButton.setTitle(menu.mainCourses[0].name, for: .normal)
         secondPositionButton.setTitleColor( .green, for: .normal)
         secondPositionButton.backgroundColor = .red
+        secondPositionButton.addAction(UIAction(handler: { _ in
+            self.addPositionInList(self.menu.mainCourses[0])
+        }), for: .touchUpInside)
         return secondPositionButton
     }()
     
-    let thirdPosition = {
+    lazy var thirdPosition = {
         let thirdPositionButton = UIButton(type: .system)
-        thirdPositionButton.setTitle("3", for: .normal)
+        thirdPositionButton.setTitle(menu.drinks[0].name, for: .normal)
         thirdPositionButton.setTitleColor( .green, for: .normal)
         thirdPositionButton.backgroundColor = .red
+        thirdPositionButton.addAction(UIAction(handler: { _ in
+            self.addPositionInList(self.menu.drinks[0])
+        }), for: .touchUpInside)
         return thirdPositionButton
     }()
     
-    let fouthPosition = {
+    lazy var fouthPosition = {
         let fouthPositionButton = UIButton(type: .system)
-        fouthPositionButton.setTitle("4", for: .normal)
+        fouthPositionButton.setTitle(menu.desserts[0].name, for: .normal)
         fouthPositionButton.setTitleColor( .green, for: .normal)
         fouthPositionButton.backgroundColor = .red
+        fouthPositionButton.addAction(UIAction(handler: { _ in
+            self.addPositionInList(self.menu.desserts[0])
+        }), for: .touchUpInside)
         return fouthPositionButton
     }()
     
-    let fifthPosition = {
+    lazy var fifthPosition = {
         let fifthPositionButton = UIButton(type: .system)
-        fifthPositionButton.setTitle("5", for: .normal)
+        fifthPositionButton.setTitle(menu.snacks[1].name, for: .normal)
         fifthPositionButton.setTitleColor( .green, for: .normal)
         fifthPositionButton.backgroundColor = .red
+        fifthPositionButton.addAction(UIAction(handler: { _ in
+            self.addPositionInList(self.menu.snacks[1])
+        }), for: .touchUpInside)
         return fifthPositionButton
     }()
     
-    let cashDeskDuringTheWorkingDay = {
-        let cashDeskDuringTheWorkingDay = UIButton(type: .system)
-        cashDeskDuringTheWorkingDay.setTitle("6", for: .normal)
-        cashDeskDuringTheWorkingDay.setTitleColor( .black, for: .normal)
-        cashDeskDuringTheWorkingDay.backgroundColor = .lightGray
-        return cashDeskDuringTheWorkingDay
+    lazy var letsWork = {
+        let letsWorkButton = UIButton(type: .system)
+        letsWorkButton.setTitle("Let's work", for: .normal)
+        letsWorkButton.setTitleColor( .black, for: .normal)
+        letsWorkButton.backgroundColor = .lightGray
+        letsWorkButton.addAction(UIAction(handler: { _ in
+            self.startWorkingDay()
+        }), for: .touchUpInside)
+        return letsWorkButton
     }()
     
-    let cashDeskAtTheEndOfTheWorkingDay = {
+    lazy var cashDeskAtTheEndOfTheWorkingDay = {
         let cashDeskAtTheBeginningOfTheWorkingDay = UIButton(type: .system)
-        cashDeskAtTheBeginningOfTheWorkingDay.setTitle("0", for: .normal)
+        cashDeskAtTheBeginningOfTheWorkingDay.setTitle("0.00", for: .normal)
         cashDeskAtTheBeginningOfTheWorkingDay.setTitleColor( .black, for: .normal)
         cashDeskAtTheBeginningOfTheWorkingDay.backgroundColor = .lightGray
+        cashDeskAtTheBeginningOfTheWorkingDay.addAction(UIAction(handler: { _ in
+            self.printOrderListPerDay()
+        }), for: .touchUpInside)
         return cashDeskAtTheBeginningOfTheWorkingDay
     }()
     
@@ -107,10 +202,10 @@ class ViewController: UIViewController {
         view.addSubview(thirdPosition)
         view.addSubview(fouthPosition)
         view.addSubview(fifthPosition)
-        view.addSubview(cashDeskDuringTheWorkingDay)
+        view.addSubview(letsWork)
         view.addSubview(cashDeskAtTheEndOfTheWorkingDay)
         
-        let stack = UIStackView(arrangedSubviews: [cashDeskDuringTheWorkingDay, firstPosition, secondPosition, thirdPosition, fouthPosition, fifthPosition, fifthPosition, cashDeskAtTheEndOfTheWorkingDay])
+        let stack = UIStackView(arrangedSubviews: [letsWork, firstPosition, secondPosition, thirdPosition, fouthPosition, fifthPosition, fifthPosition, cashDeskAtTheEndOfTheWorkingDay])
         stack.axis = .vertical
         stack.distribution = .fillEqually
         stack.spacing = 20

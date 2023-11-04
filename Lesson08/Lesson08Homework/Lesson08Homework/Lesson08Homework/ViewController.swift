@@ -12,42 +12,54 @@ import UIKit
 
 class Position {
     var type : String = ""
+    
+    func printType() {
+        print(type)
+    }
 }
 
 class MenuPosition: Position {
     var name : String = ""
     var price : Double = 0
+    
+    override func printType() {
+        print("\(name) \(price)")
+    }
 }
 
 class Menu {
-    var snacks : [MenuPosition] = []
-    var mainCourses : [MenuPosition] = []
-    var drinks : [MenuPosition] = []
-    var desserts : [MenuPosition] = []
+    var snacks : [Position] = []
+    var mainCourses : [Position] = []
+    var drinks : [Position] = []
+    var desserts : [Position] = []
 }
 
-func printPositionOfOrder(name: Position, menu: Menu) {
-    for value in menu.snacks {
-        if value.type == name.type {
-            print("\(value.name) \(value.price)")
-                    }
-            }
-    for value in menu.mainCourses {
-        if value.type == name.type {
-            print("\(value.name) \(value.price)")
-                    }
-            }
-    for value in menu.drinks {
-        if value.type == name.type {
-            print("\(value.name) \(value.price)")
-                    }
-            }
-    for value in menu.desserts {
-        if value.type == name.type {
-            print("\(value.name) \(value.price)")
-                    }
-            }
+func printPosition(_ position: Position) {
+    position.printType()
 }
+
+//func printPositionOfOrder(name: Position, menu: Menu) {
+//    for value in menu.snacks {
+//        if value.type == name.type {
+//            print("\(value.name) \(value.price)")
+//                    }
+//            }
+//    for value in menu.mainCourses {
+//        if value.type == name.type {
+//            print("\(value.name) \(value.price)")
+//                    }
+//            }
+//    for value in menu.drinks {
+//        if value.type == name.type {
+//            print("\(value.name) \(value.price)")
+//                    }
+//            }
+//    for value in menu.desserts {
+//        if value.type == name.type {
+//            print("\(value.name) \(value.price)")
+//                    }
+//            }
+//}
 
 class ViewController: UIViewController {
 
@@ -130,7 +142,8 @@ class ViewController: UIViewController {
 
         let orderPosition = Position()
         orderPosition.type = "Desserts"
-        printPositionOfOrder(name: orderPosition, menu: menu)
+//        printPositionOfOrder(name: orderPosition, menu: menu)
+        printPosition(iceCream)
     }
 
 
